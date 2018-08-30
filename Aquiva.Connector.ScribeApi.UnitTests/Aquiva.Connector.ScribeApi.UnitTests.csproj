@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net452</TargetFramework>
+        <RootNamespace>Aquiva.Connector.ScribeApi</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Aquiva.Connector.ScribeApi\Aquiva.Connector.ScribeApi.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="System.ComponentModel.Composition" />
+      <Reference Include="Scribe.Core.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d219f6ec67c0e6c3">
+        <HintPath>..\Binaries\Scribe.Core.Common.dll</HintPath>
+      </Reference>
+      <Reference Include="Scribe.Core.ConnectorApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d219f6ec67c0e6c3">
+        <HintPath>..\Binaries\Scribe.Core.ConnectorApi.dll</HintPath>
+      </Reference>
+      <Reference Include="Scribe.Core.Security, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d88349dd80146402">
+        <HintPath>..\Binaries\Scribe.Core.Security.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="xunit" Version="2.4.0" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+    </ItemGroup>
+
+</Project>

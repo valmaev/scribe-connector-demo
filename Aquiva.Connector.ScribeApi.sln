@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquiva.Connector.ScribeApi", "Aquiva.Connector.ScribeApi\Aquiva.Connector.ScribeApi.csproj", "{47D26FE6-A054-4885-883C-5F5C80188835}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aquiva.Connector.ScribeApi.UnitTests", "Aquiva.Connector.ScribeApi.UnitTests\Aquiva.Connector.ScribeApi.UnitTests.csproj", "{A4D62D87-A8D8-4A6E-9751-3BF680A72227}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Binaries", "Binaries", "{B41F5E87-E5E0-4556-A0A9-8B9FD1809361}"
+ProjectSection(SolutionItems) = preProject
+	Binaries\Scribe.Core.Common.dll = Binaries\Scribe.Core.Common.dll
+	Binaries\Scribe.Core.ConnectorApi.dll = Binaries\Scribe.Core.ConnectorApi.dll
+	Binaries\Scribe.Core.Security.dll = Binaries\Scribe.Core.Security.dll
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47D26FE6-A054-4885-883C-5F5C80188835}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47D26FE6-A054-4885-883C-5F5C80188835}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47D26FE6-A054-4885-883C-5F5C80188835}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47D26FE6-A054-4885-883C-5F5C80188835}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4D62D87-A8D8-4A6E-9751-3BF680A72227}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4D62D87-A8D8-4A6E-9751-3BF680A72227}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4D62D87-A8D8-4A6E-9751-3BF680A72227}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4D62D87-A8D8-4A6E-9751-3BF680A72227}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

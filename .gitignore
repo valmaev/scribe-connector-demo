@@ -1,0 +1,32 @@
+# Build artifacts
+[Aa]rtifacts
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+[Pp]ackages/
+
+# FAKE
+.fake/
+
+# NuGet
+.nuget/
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# ReSharper
+_[Rr]e[Ss]harper.*/
+*.[Rr]e[Ss]harper*
+
+# Visual Studio
+*.suo
+*.user
+.vs/
+
+# MonoDevelop
+*.userprefs
+
+# macOS
+*.DS_Store
