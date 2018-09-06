@@ -89,5 +89,12 @@ namespace Aquiva.Connector.ScribeApi
             Assert.Equal("1.0.0.0", actual.SettingsUIVersion);
             Assert.Empty(actual.XapFileName);
         }
+
+        [Fact]
+        public void ScribeApiConnector_Always_ShouldImplementIConnectorInterface()
+        {
+            var actual = typeof(ScribeApiConnector).GetInterfaces();
+            Assert.Contains(typeof(IConnector), actual);
+        }
     }
 }

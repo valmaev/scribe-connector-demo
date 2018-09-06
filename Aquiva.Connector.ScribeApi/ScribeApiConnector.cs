@@ -1,4 +1,8 @@
-﻿using Scribe.Core.ConnectorApi;
+﻿using System;
+using System.Collections.Generic;
+using Scribe.Core.ConnectorApi;
+using Scribe.Core.ConnectorApi.Actions;
+using Scribe.Core.ConnectorApi.Query;
 
 namespace Aquiva.Connector.ScribeApi
 {
@@ -15,7 +19,19 @@ namespace Aquiva.Connector.ScribeApi
         settingsUITypeName: "",
         settingsUIVersion: "1.0.0.0",
         xapFileName: "")]
-    public sealed class ScribeApiConnector
+    public sealed class ScribeApiConnector : IConnector
     {
+        public Guid ConnectorTypeId { get; }
+        public bool IsConnected { get; }
+
+        public string PreConnect(IDictionary<string, string> properties) => "";
+        public void Connect(IDictionary<string, string> properties) { }
+        public void Disconnect() { }
+
+        public IMetadataProvider GetMetadataProvider() => null;
+
+        public IEnumerable<DataEntity> ExecuteQuery(Query query) => new DataEntity[0];
+        public OperationResult ExecuteOperation(OperationInput input) => null;
+        public MethodResult ExecuteMethod(MethodInput input) => null;
     }
 }
