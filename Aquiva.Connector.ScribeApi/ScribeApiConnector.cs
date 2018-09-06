@@ -9,7 +9,7 @@ namespace Aquiva.Connector.ScribeApi
     [ScribeConnector(
         name: "TIBCO Scribe Platform API (Demo)",
         description: "Metaconnector which connects platform to itself.",
-        connectorTypeId: "e0e8461e-92ae-4b5f-980b-a2dd104b7d24",
+        connectorTypeId: ConnectorTypeIdString,
         connectorType: typeof(ScribeApiConnector),
         connectorVersion: "0.0.0.0",
         supportedSolutionRoles: new[] {"Scribe.IS2.Source", "Scribe.IS2.Target"},
@@ -21,7 +21,9 @@ namespace Aquiva.Connector.ScribeApi
         xapFileName: "")]
     public sealed class ScribeApiConnector : IConnector
     {
-        public Guid ConnectorTypeId { get; }
+        private const string ConnectorTypeIdString = "e0e8461e-92ae-4b5f-980b-a2dd104b7d24";
+
+        public Guid ConnectorTypeId { get; } = Guid.Parse(ConnectorTypeIdString);
         public bool IsConnected { get; }
 
         public string PreConnect(IDictionary<string, string> properties) => "";

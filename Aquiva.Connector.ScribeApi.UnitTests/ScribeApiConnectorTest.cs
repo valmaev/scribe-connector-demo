@@ -96,5 +96,22 @@ namespace Aquiva.Connector.ScribeApi
             var actual = typeof(ScribeApiConnector).GetInterfaces();
             Assert.Contains(typeof(IConnector), actual);
         }
+
+        [Fact]
+        public void ScribeApiConnector_ConnectorTypeId_Always_ShouldReturnParsedIdFromTheAttribute()
+        {
+            var sut = CreateSystemUnderTest();
+            var expected = sut
+                .GetType()
+                .GetCustomAttributes<ScribeConnectorAttribute>()
+                .Single()
+                .ConnectorTypeId;
+            Assert.Equal(Guid.Parse(expected), sut.ConnectorTypeId);
+        }
+
+        private static ScribeApiConnector CreateSystemUnderTest()
+        {
+            return new ScribeApiConnector();
+        }
     }
 }
