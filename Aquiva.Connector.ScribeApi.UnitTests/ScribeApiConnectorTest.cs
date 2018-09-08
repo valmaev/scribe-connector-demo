@@ -210,9 +210,9 @@ namespace Aquiva.Connector.ScribeApi
 
             Assert.All(actualProperties, option =>
             {
-                Assert.True(!option.Key.EndsWith("/"));
-                Assert.True(!option.Key.EndsWith("\\"));
-                Assert.True(Uri.IsWellFormedUriString(option.Key, UriKind.Absolute));
+                Assert.True(!option.Value.EndsWith("/"));
+                Assert.True(!option.Value.EndsWith("\\"));
+                Assert.True(Uri.IsWellFormedUriString(option.Value, UriKind.Absolute));
             });
         }
 

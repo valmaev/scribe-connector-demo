@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Actions;
@@ -46,10 +46,10 @@ namespace Aquiva.Connector.ScribeApi
                         Order = 0,
                         Options =
                         {
-                            ["https://qaendpoint.scribeqa.net"] = "QA",
-                            ["https://demoendpoint.scribeqa.net"] = "DEMO",
-                            ["https://sbendpoint.scribesoft.com"] = "SANDBOX",
-                            ["https://api.scribesoft.com"] = "PRODUCTION",
+                            ["QA"] = "https://qaendpoint.scribeqa.net",
+                            ["DEMO"] = "https://demoendpoint.scribeqa.net",
+                            ["SANDBOX"] = "https://sbendpoint.scribesoft.com",
+                            ["PRODUCTION"] = "https://api.scribesoft.com"
                         }
                     },
                     new EntryDefinition
