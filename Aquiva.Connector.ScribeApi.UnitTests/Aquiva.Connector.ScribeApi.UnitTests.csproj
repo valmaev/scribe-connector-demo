@@ -23,6 +23,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.5.0" />
+        <PackageReference Include="AutoFixture.Idioms" Version="4.5.0" />
+        <PackageReference Include="AutoFixture.Xunit2" Version="4.5.0" />
         <PackageReference Include="xunit" Version="2.4.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
     </ItemGroup>

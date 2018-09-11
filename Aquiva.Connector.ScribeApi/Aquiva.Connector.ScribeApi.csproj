@@ -17,4 +17,9 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.6" />
+      <PackageReference Include="Newtonsoft.Json" Version="6.0.4" />
+    </ItemGroup>
+
 </Project>
