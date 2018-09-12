@@ -1,7 +1,9 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Aquiva.Connector.ScribeApi
 {
@@ -10,7 +12,8 @@ namespace Aquiva.Connector.ScribeApi
         public static HttpClient Create(
             Uri baseAddress,
             string username,
-            string password)
+            string password,
+            HttpMessageHandler handler = null)
         {
             if (baseAddress == null)
                 throw new ArgumentNullException(nameof(baseAddress));
@@ -19,7 +22,7 @@ namespace Aquiva.Connector.ScribeApi
             if (password == null)
                 throw new ArgumentNullException(nameof(password));
 
-            var httpClient = new HttpClient {BaseAddress = baseAddress};
+            var httpClient = new HttpClient(handler ?? new HttpClientHandler()) {BaseAddress = baseAddress};
             httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.AcceptCharset.Add(
@@ -30,6 +33,25 @@ namespace Aquiva.Connector.ScribeApi
                     Convert.ToBase64String(
                         Encoding.UTF8.GetBytes($"{username}:{password}")));
             return httpClient;
+        }
+
+        public static async Task CheckConnection(this HttpClient httpClient)
+        {
+            var testResponse = await httpClient
+                .GetAsync(
+                    new Uri("/v1/orgs/?limit=1", UriKind.Relative),
+                    HttpCompletionOption.ResponseHeadersRead);
+
+            if (testResponse.IsSuccessStatusCode)
+                return;
+
+            switch (testResponse.StatusCode)
+            {
+                case HttpStatusCode.Unauthorized:
+                    throw new InvalidOperationException("Invalid username or password");
+                default:
+                    throw new InvalidOperationException("Unknown error occured");
+            }
         }
     }
 }
