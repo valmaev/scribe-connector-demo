@@ -1,4 +1,9 @@
 @startuml
+
+!define SHOW_PRECONNECT
+!define SHOW_CONNECT
+!define SHOW_DISCONNECT
+
 skinparam backgroundColor #000000
 skinparam shadowing false
 skinparam sequenceArrowThickness 2
@@ -24,8 +29,12 @@ hide footbox
 
 participant "Agent" as A
 participant "IConnector" as C
-participant "External System" as E
 
+!ifdef SHOW_CONNECT || SHOW_DISCONNECT
+participant "External System" as E
+!endif
+
+!ifdef SHOW_PRECONNECT
 [-> A: Request for\nConnection Form
 activate A
 A -> C: PreConnect()
@@ -33,7 +42,10 @@ activate C
 C --> A: Serialized Connection Form
 deactivate C
 deactivate A
+!endif
 
+!ifdef SHOW_CONNECT
+|||
 ... User fills Connection Form with credentials and press "OK" ...
 
 [-> A: Request for\nTest Connection\nwith credentials
@@ -45,16 +57,27 @@ C -> E: Auth with credentials
 activate E
 E --> C: Auth Result
 C -> C: IsConnected = Auth Result
+deactivate E
 C --> A
 A -> C: Read IsConnected 
-[<-- A: Return IsConnected 
-
-A -> C: Disconnect(credentials)
-C -> C: Clean Resources
-C -> E: Close Connection
-C --> A
-[<-- A
-deactivate E
+[<-- A: Return\nIsConnected 
 deactivate C
 deactivate A
+!endif
+
+!ifdef SHOW_DISCONNECT
+A -> C: Disconnect(credentials)
+activate A
+activate C
+C -> C: Clean Resources
+C -> E: Close Connection
+activate E
+E --> C
+C --> A
+deactivate E
+[<-- A: \t\t
+deactivate E
+deactivate C
+!endif
+
 @enduml
