@@ -11,6 +11,11 @@ ProjectSection(SolutionItems) = preProject
 	Binaries\Scribe.Core.Security.dll = Binaries\Scribe.Core.Security.dll
 EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{17BD72EC-83D5-4890-B504-69C2D04EE05D}"
+ProjectSection(SolutionItems) = preProject
+	Docs\connector-lifecycle-sequence.puml = Docs\connector-lifecycle-sequence.puml
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

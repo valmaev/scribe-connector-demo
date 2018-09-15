@@ -1,0 +1,60 @@
+@startuml
+skinparam backgroundColor #000000
+skinparam shadowing false
+skinparam sequenceArrowThickness 2
+
+skinparam sequence {
+    ArrowColor #FF9300
+    ArrowFontName "Iosevka SS08"
+    ArrowFontColor #FFFFFF
+    
+    DelayFontName "Iosevka SS08"
+    DelayFontColor #FFFFFF
+
+    LifeLineBorderColor #FF9300
+    LifeLineBackgroundColor #FF9300
+
+    ParticipantBorderColor #FF9300
+    ParticipantBackgroundColor #000000
+    ParticipantFontName "Iosevka SS08"
+    ParticipantFontColor #FFFFFF
+}
+
+hide footbox
+
+participant "Agent" as A
+participant "IConnector" as C
+participant "External System" as E
+
+[-> A: Request for\nConnection Form
+activate A
+A -> C: PreConnect()
+activate C
+C --> A: Serialized Connection Form
+deactivate C
+deactivate A
+
+... User fills Connection Form with credentials and press "OK" ...
+
+[-> A: Request for\nTest Connection\nwith credentials
+activate A
+A -> C: Connect(credentials)
+activate C
+C -> C: IsConnected = false
+C -> E: Auth with credentials
+activate E
+E --> C: Auth Result
+C -> C: IsConnected = Auth Result
+C --> A
+A -> C: Read IsConnected 
+[<-- A: Return IsConnected 
+
+A -> C: Disconnect(credentials)
+C -> C: Clean Resources
+C -> E: Close Connection
+C --> A
+[<-- A
+deactivate E
+deactivate C
+deactivate A
+@enduml
