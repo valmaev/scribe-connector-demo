@@ -12,8 +12,16 @@ namespace Aquiva.Connector.ScribeApi
         public static HttpClient Create(
             Uri baseAddress,
             string username,
+            string password)
+        {
+            return Create(baseAddress, username, password, new HttpClientHandler());
+        }
+
+        public static HttpClient Create(
+            Uri baseAddress,
+            string username,
             string password,
-            HttpMessageHandler handler = null)
+            HttpMessageHandler handler)
         {
             if (baseAddress == null)
                 throw new ArgumentNullException(nameof(baseAddress));
@@ -21,8 +29,10 @@ namespace Aquiva.Connector.ScribeApi
                 throw new ArgumentNullException(nameof(username));
             if (password == null)
                 throw new ArgumentNullException(nameof(password));
+            if (handler == null)
+                throw new ArgumentNullException(nameof(handler));
 
-            var httpClient = new HttpClient(handler ?? new HttpClientHandler()) {BaseAddress = baseAddress};
+            var httpClient = new HttpClient(handler) {BaseAddress = baseAddress};
             httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
             httpClient.DefaultRequestHeaders.AcceptCharset.Add(

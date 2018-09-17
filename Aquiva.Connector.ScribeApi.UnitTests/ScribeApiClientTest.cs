@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
 using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
 using Xunit;
@@ -14,11 +17,16 @@ namespace Aquiva.Connector.ScribeApi
 {
     public class ScribeApiClientTest
     {
-        [Theory, AutoData]
-        public void ScribeApiClient_AllPublicMembers_Always_ShouldHaveNullGuards(
+        [Theory, ConnectorData]
+        public void ScribeApiClient_AllSyncPublicMembers_Always_ShouldHaveNullGuards(
             GuardClauseAssertion assertion)
         {
-            assertion.Verify(typeof(ScribeApiClient));
+            // Filtering out async methods from guard clause testing since they're lazily
+            // evaluated, therefore they don't conform Fail Fast principle
+            var sut = typeof(ScribeApiClient)
+                .GetMethods()
+                .Where(x => x.GetCustomAttribute(typeof(AsyncStateMachineAttribute)) == null);
+            assertion.Verify(sut);
         }
 
         [Theory, AutoData]
@@ -110,6 +118,23 @@ namespace Aquiva.Connector.ScribeApi
             {
                 _requests.Add(request);
                 return await Task.FromResult(_response);
+            }
+        }
+
+        public class ConnectorDataAttribute : AutoDataAttribute
+        {
+            private static IFixture CreateFixture()
+            {
+                var fixture = new Fixture();
+                fixture.Register<HttpMessageHandler>(
+                    () => new StubbedResponseHandler(
+                        new HttpResponseMessage(HttpStatusCode.OK)));
+                return fixture;
+            }
+            
+            public ConnectorDataAttribute()
+                : base(CreateFixture)
+            {
             }
         }
     }
