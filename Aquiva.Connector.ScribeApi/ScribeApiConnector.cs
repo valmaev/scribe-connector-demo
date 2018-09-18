@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Actions;
 using Scribe.Core.ConnectorApi.ConnectionUI;
@@ -26,8 +27,22 @@ namespace Aquiva.Connector.ScribeApi
         private const string ConnectorTypeIdString = "e0e8461e-92ae-4b5f-980b-a2dd104b7d24";
         private const string CryptoKey = "3103dcf5-6d7c-4b56-8297-f9e449b57576";
 
+        private readonly HttpMessageHandler _httpMessageHandler;
+        private HttpClient _httpClient;
+
         public Guid ConnectorTypeId { get; } = Guid.Parse(ConnectorTypeIdString);
         public bool IsConnected { get; private set; }
+
+        public ScribeApiConnector()
+            : this(new HttpClientHandler()) { }
+
+        public ScribeApiConnector(HttpMessageHandler httpMessageHandler)
+        {
+            if (httpMessageHandler == null)
+                throw new ArgumentNullException(nameof(httpMessageHandler));
+
+            _httpMessageHandler = httpMessageHandler;
+        }
 
         public string PreConnect(IDictionary<string, string> properties)
         {
@@ -83,8 +98,8 @@ namespace Aquiva.Connector.ScribeApi
             var username = properties["Username"];
             var password = Decryptor.Decrypt_AesManaged(properties["Password"], CryptoKey);
 
-            using (var httpClient = ScribeApiClient.Create(baseAddress, username, password))
-                httpClient.CheckConnection().GetAwaiter().GetResult();
+            _httpClient = ScribeApiClient.Create(baseAddress, username, password, _httpMessageHandler);
+            _httpClient.CheckConnection().GetAwaiter().GetResult();
 
             IsConnected = true;
         }

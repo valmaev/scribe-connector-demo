@@ -6,9 +6,7 @@ using System.Net.Http;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture;
 using AutoFixture.Idioms;
 using AutoFixture.Xunit2;
 using Xunit;
@@ -17,7 +15,7 @@ namespace Aquiva.Connector.ScribeApi
 {
     public class ScribeApiClientTest
     {
-        [Theory, ConnectorData]
+        [Theory, ScribeApiConnectorData]
         public void ScribeApiClient_AllSyncPublicMembers_Always_ShouldHaveNullGuards(
             GuardClauseAssertion assertion)
         {
@@ -97,45 +95,6 @@ namespace Aquiva.Connector.ScribeApi
                 .Where(c => (c < 200 || c > 299) && c != 401)
                 .Distinct()
                 .Select(c => new object[] {c});
-        }
-
-        public class StubbedResponseHandler : DelegatingHandler
-        {
-            private readonly HttpResponseMessage _response;
-            private readonly List<HttpRequestMessage> _requests;
-
-            public StubbedResponseHandler(HttpResponseMessage response)
-            {
-                _response = response;
-                _requests = new List<HttpRequestMessage>();
-            }
-
-            public IReadOnlyCollection<HttpRequestMessage> Requests => _requests;
-
-            protected override async Task<HttpResponseMessage> SendAsync(
-                HttpRequestMessage request,
-                CancellationToken cancellationToken)
-            {
-                _requests.Add(request);
-                return await Task.FromResult(_response);
-            }
-        }
-
-        public class ConnectorDataAttribute : AutoDataAttribute
-        {
-            private static IFixture CreateFixture()
-            {
-                var fixture = new Fixture();
-                fixture.Register<HttpMessageHandler>(
-                    () => new StubbedResponseHandler(
-                        new HttpResponseMessage(HttpStatusCode.OK)));
-                return fixture;
-            }
-            
-            public ConnectorDataAttribute()
-                : base(CreateFixture)
-            {
-            }
         }
     }
 }

@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
+using AutoFixture.Idioms;
+using Scribe.Core.ConnectorApi.Cryptography;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.ConnectionUI;
 using Xunit;
@@ -97,6 +101,13 @@ namespace Aquiva.Connector.ScribeApi
         {
             var actual = typeof(ScribeApiConnector).GetInterfaces();
             Assert.Contains(typeof(IConnector), actual);
+        }
+
+        [Theory, ScribeApiConnectorData]
+        public void ScribeApiConnector_AllPublicConstructors_Always_ShouldHaveNullGuards(
+            GuardClauseAssertion assertion)
+        {
+            assertion.Verify(typeof(ScribeApiConnector).GetConstructors());
         }
 
         [Fact]
@@ -216,9 +227,49 @@ namespace Aquiva.Connector.ScribeApi
             });
         }
 
-        private static ScribeApiConnector CreateSystemUnderTest()
+        [Fact]
+        public void ScribeApiConnector_Connect_WithValidProperties_ShouldSetIsConnectedToTrue()
         {
-            return new ScribeApiConnector();
+            var httpHandler = new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.OK));
+            var sut = CreateSystemUnderTest(httpHandler);
+            var input = CreateProperties();
+            Assert.False(sut.IsConnected);
+
+            sut.Connect(input);
+
+            Assert.True(sut.IsConnected);
+        }
+
+        [Fact]
+        public void ScribeApiConnector_Connect_WithBadCredentialsInProperties_ShouldThrow()
+        {
+            var httpHandler = new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.Unauthorized));
+            var sut = CreateSystemUnderTest(httpHandler);
+            var input = CreateProperties();
+            Assert.False(sut.IsConnected);
+
+            var actual = Assert.ThrowsAny<Exception>(() => sut.Connect(input));
+
+            Assert.Contains("Invalid username or password", actual.Message);
+            Assert.False(sut.IsConnected);
+        }
+
+        private static ScribeApiConnector CreateSystemUnderTest(HttpMessageHandler handler = null)
+        {
+            return new ScribeApiConnector(
+                handler ?? new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.OK)));
+        }
+
+        private static Dictionary<string, string> CreateProperties()
+        {
+            return new Dictionary<string, string>
+            {
+                ["Environment"] = "https://sbendpoint.scribesoft.com",
+                ["Username"] = "foo",
+                ["Password"] = Encryptor.Encrypt_AesManaged(
+                    value: "foobar",
+                    key: "3103dcf5-6d7c-4b56-8297-f9e449b57576")
+            };
         }
     }
 }
