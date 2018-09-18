@@ -1,8 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Actions;
 using Scribe.Core.ConnectorApi.ConnectionUI;
+using Scribe.Core.ConnectorApi.Cryptography;
 using Scribe.Core.ConnectorApi.Query;
 
 namespace Aquiva.Connector.ScribeApi
@@ -26,7 +27,7 @@ namespace Aquiva.Connector.ScribeApi
         private const string CryptoKey = "3103dcf5-6d7c-4b56-8297-f9e449b57576";
 
         public Guid ConnectorTypeId { get; } = Guid.Parse(ConnectorTypeIdString);
-        public bool IsConnected { get; }
+        public bool IsConnected { get; private set; }
 
         public string PreConnect(IDictionary<string, string> properties)
         {
@@ -74,7 +75,20 @@ namespace Aquiva.Connector.ScribeApi
             return form.Serialize();
         }
 
-        public void Connect(IDictionary<string, string> properties) { }
+        public void Connect(IDictionary<string, string> properties) 
+        {
+            IsConnected = false;
+
+            var baseAddress = new Uri(properties["Environment"] ?? "");
+            var username = properties["Username"];
+            var password = Decryptor.Decrypt_AesManaged(properties["Password"], CryptoKey);
+
+            using (var httpClient = ScribeApiClient.Create(baseAddress, username, password))
+                httpClient.CheckConnection().GetAwaiter().GetResult();
+
+            IsConnected = true;
+        }
+
         public void Disconnect() { }
 
         public IMetadataProvider GetMetadataProvider() => null;
