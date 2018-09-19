@@ -254,6 +254,31 @@ namespace Aquiva.Connector.ScribeApi
             Assert.False(sut.IsConnected);
         }
 
+        [Fact]
+        public void ScribeApiConnector_Disconnect_Always_ShouldSetIsConnectedToFalse()
+        {
+            var sut = CreateSystemUnderTest();
+            Assert.False(sut.IsConnected);
+
+            sut.Disconnect();
+
+            Assert.False(sut.IsConnected);
+        }
+
+        [Fact]
+        public void ScribeApiConnector_Disconnect_AfterSuccessfulConnection_ShouldSetIsConnectedToFalse()
+        {
+            var sut = CreateSystemUnderTest();
+            var input = CreateProperties();
+            Assert.False(sut.IsConnected);
+            
+            sut.Connect(input);
+            Assert.True(sut.IsConnected);
+            
+            sut.Disconnect();
+            Assert.False(sut.IsConnected);
+        }
+
         private static ScribeApiConnector CreateSystemUnderTest(HttpMessageHandler handler = null)
         {
             return new ScribeApiConnector(

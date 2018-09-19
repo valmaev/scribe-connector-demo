@@ -104,7 +104,11 @@ namespace Aquiva.Connector.ScribeApi
             IsConnected = true;
         }
 
-        public void Disconnect() { }
+        public void Disconnect()
+        {
+            _httpClient?.Dispose();
+            IsConnected = false;
+        }
 
         public IMetadataProvider GetMetadataProvider() => null;
 
