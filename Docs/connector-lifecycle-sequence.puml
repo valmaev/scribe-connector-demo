@@ -69,8 +69,9 @@ deactivate A
 A -> C: Disconnect(credentials)
 activate A
 activate C
-C -> C: Clean Resources
 C -> E: Close Connection
+C -> C: Clean Resources
+C -> C: IsConnected = false
 activate E
 E --> C
 C --> A
