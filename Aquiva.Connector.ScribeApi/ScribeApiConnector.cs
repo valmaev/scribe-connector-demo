@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using Aquiva.Connector.ScribeApi.Metadata;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Actions;
 using Scribe.Core.ConnectorApi.ConnectionUI;
@@ -110,7 +111,7 @@ namespace Aquiva.Connector.ScribeApi
             IsConnected = false;
         }
 
-        public IMetadataProvider GetMetadataProvider() => null;
+        public IMetadataProvider GetMetadataProvider() => new HardcodedMetadataProvider();
 
         public IEnumerable<DataEntity> ExecuteQuery(Query query) => new DataEntity[0];
         public OperationResult ExecuteOperation(OperationInput input) => null;
