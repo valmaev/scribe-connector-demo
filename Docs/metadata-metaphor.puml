@@ -1,0 +1,44 @@
+@startuml
+
+skinparam backgroundColor #000000
+skinparam shadowing false
+skinparam sequenceArrowThickness 2
+
+skinparam class {
+    ArrowColor #FF9300
+    ArrowFontName "Iosevka SS08"
+    ArrowFontColor #FFFFFF
+
+    AttributeFontName "Iosevka SS08"
+    AttributeFontColor #FFFFFF
+    BorderColor #FF9300
+    BackgroundColor #000000
+    FontName "Iosevka SS08"
+    FontColor #FFFFFF
+}
+
+hide circle
+
+class Organization {
+   * Id
+   ---
+   * ParentId
+   * Name
+   Status
+}
+
+class Solution {
+   * Id
+   ---
+   * OrganizationId
+   * Name
+   * AgentId
+   SolutionType
+   Status
+   LastRunTime
+   NextRunTime
+}
+
+Organization --o{ Solution
+
+@enduml
