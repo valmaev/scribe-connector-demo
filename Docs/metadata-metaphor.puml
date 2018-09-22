@@ -39,6 +39,6 @@ class Solution {
    NextRunTime
 }
 
-Organization --o{ Solution
+Organization -right-o{ Solution: \t\t\t\t
 
 @enduml
