@@ -2,7 +2,6 @@
 
 skinparam backgroundColor #000000
 skinparam shadowing false
-skinparam sequenceArrowThickness 2
 
 skinparam class {
     ArrowColor #FF9300
