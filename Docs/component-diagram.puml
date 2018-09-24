@@ -1,0 +1,41 @@
+@startuml 
+
+skinparam {
+    ArrowColor #FF9300
+    ArrowFontName "Iosevka SS08"
+    ArrowFontColor #FFFFFF
+    
+    BackgroundColor #000000
+    Shadowing false
+}
+
+skinparam component {
+    BorderColor #FF9300
+    BackgroundColor #000000
+    FontName "Iosevka SS08"
+    FontColor #FFFFFF
+}
+
+skinparam cloud {
+    BorderColor #FF9300
+    BackgroundColor #000000
+    FontName "Iosevka SS08"
+    FontColor #FFFFFF
+}
+
+skinparam interface {
+    BorderColor #FF9300
+    BackgroundColor #000000
+    FontName "Iosevka SS08"
+    FontColor #FFFFFF
+}
+
+interface "\nAPI" as API
+cloud "\nTIBCO Scribe Online\n" as Scribe
+component "Platform\nConnector" as Connector
+
+Scribe -up- API : "  implements"
+Connector -left-( API : " calls"
+Scribe -down-> Connector : " instantiates"
+
+@enduml
