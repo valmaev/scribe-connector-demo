@@ -86,6 +86,18 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             Assert.False(actual.SupportsSequences);
         }
 
+        [Fact]
+        public void HardcodedMetadataProvider_RetrieveActionDefinitions_Always_ShouldReturnUniqueActionFullNames()
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveActionDefinitions()
+                .GroupBy(x => x.FullName);
+
+            Assert.All(actual, a => Assert.Single(a));
+        }
+
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 
             new HardcodedMetadataProvider();
     }
