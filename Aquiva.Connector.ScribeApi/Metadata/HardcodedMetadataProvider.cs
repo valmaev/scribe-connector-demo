@@ -69,7 +69,25 @@ namespace Aquiva.Connector.ScribeApi.Metadata
 
         public IEnumerable<IObjectDefinition> RetrieveObjectDefinitions(
             bool shouldGetProperties = false,
-            bool shouldGetRelations = false) => new IObjectDefinition[0];
+            bool shouldGetRelations = false) => new[]
+        {
+            new ObjectDefinition
+            {
+                FullName = "Organization",
+                Name = "Organization",
+                Description = "Represents the entity that is using TIBCO Scribe ® Online",
+                Hidden = false,
+                SupportedActionFullNames = new List<string>
+                {
+                    nameof(KnownActions.Query),
+                    nameof(KnownActions.Create),
+                    nameof(KnownActions.Update),
+                    nameof(KnownActions.Delete),
+                },
+                PropertyDefinitions = new List<IPropertyDefinition>(0),
+                RelationshipDefinitions = new List<IRelationshipDefinition>(0)
+            }
+        };
 
         public IObjectDefinition RetrieveObjectDefinition(
             string objectName,

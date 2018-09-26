@@ -98,6 +98,52 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             Assert.All(actual, a => Assert.Single(a));
         }
 
+        [Fact]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinitions_Always_ShouldReturnUniqueObjectFullNames()
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveObjectDefinitions()
+                .GroupBy(x => x.FullName);
+
+            Assert.All(actual, a => Assert.Single(a));
+        }
+
+        [Fact]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinitions_ForEachObject_ShouldUseOnlyExistingActions()
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveObjectDefinitions()
+                .SelectMany(x => x.SupportedActionFullNames);
+
+            var expected = sut
+                .RetrieveActionDefinitions()
+                .Select(x => x.FullName);
+            Assert.All(actual, action => Assert.Contains(action, expected));
+        }
+
+        [Fact]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinitions_ForEachObject_ShouldUseAllTheExistingActions()
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveObjectDefinitions()
+                .SelectMany(x => x.SupportedActionFullNames)
+                .Distinct()
+                .ToList();
+
+            var expected = sut
+                .RetrieveActionDefinitions()
+                .Select(x => x.FullName)
+                .Distinct()
+                .ToList();
+            Assert.Equal(expected.Count, actual.Count);
+        }
+
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 
             new HardcodedMetadataProvider();
     }
