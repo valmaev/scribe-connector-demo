@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Scribe.Core.ConnectorApi.Metadata;
 using Xunit;
@@ -142,6 +143,36 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                 .Distinct()
                 .ToList();
             Assert.Equal(expected.Count, actual.Count);
+        }
+
+        [Fact]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinitions_ForEachObject_ShouldReturnUniquePropertyFullNames()
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = new List<string>(
+                from o in sut.RetrieveObjectDefinitions(shouldGetProperties: true)
+                from p in o.PropertyDefinitions
+                select $"{o.FullName} {p.FullName}");
+
+            var expected = actual.Distinct().ToList();
+            Assert.Equal(expected.Count, actual.Count);
+            Assert.All(actual, a => Assert.Contains(a, expected));
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinitions_Always_ShouldReturnPropertiesAccordingToFlag(
+            bool shouldGetProperties)
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveObjectDefinitions(shouldGetProperties: shouldGetProperties)
+                .SelectMany(x => x.PropertyDefinitions);
+
+            Assert.Equal(shouldGetProperties, actual.Any());
         }
 
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 

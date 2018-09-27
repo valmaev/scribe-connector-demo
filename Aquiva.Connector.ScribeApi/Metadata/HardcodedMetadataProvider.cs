@@ -84,7 +84,71 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                     nameof(KnownActions.Update),
                     nameof(KnownActions.Delete),
                 },
-                PropertyDefinitions = new List<IPropertyDefinition>(0),
+                PropertyDefinitions = shouldGetProperties
+                    ? new List<IPropertyDefinition>
+                    {
+                        new PropertyDefinition
+                        {
+                            Description = "Organization ID",
+                            FullName = "Id",
+                            Name = "Id",
+                            IsPrimaryKey = true,
+                            Nullable = true,
+                            NumericPrecision = 0,
+                            NumericScale = 0,
+                            PresentationType = null,
+                            PropertyType = typeof(int).FullName,
+                            Size = 0,
+                            RequiredInActionInput = false,
+                            UsedInActionInput = false,
+                            UsedInActionOutput = true,
+                            UsedInLookupCondition = false,
+                            UsedInQueryConstraint = true,
+                            UsedInQuerySelect = true,
+                            UsedInQuerySequence = true
+                        },
+                        new PropertyDefinition
+                        {
+                            Description = "ID of Parent Organization",
+                            FullName = "ParentId",
+                            Name = "ParentId",
+                            IsPrimaryKey = false,
+                            Nullable = true,
+                            NumericPrecision = 0,
+                            NumericScale = 0,
+                            PresentationType = null,
+                            PropertyType = typeof(int).FullName,
+                            Size = 0,
+                            RequiredInActionInput = true,
+                            UsedInActionInput = true,
+                            UsedInActionOutput = true,
+                            UsedInLookupCondition = false,
+                            UsedInQueryConstraint = true,
+                            UsedInQuerySelect = true,
+                            UsedInQuerySequence = true
+                        },
+                        new PropertyDefinition
+                        {
+                            Description = "Organization Name",
+                            FullName = "Name",
+                            Name = "Name",
+                            IsPrimaryKey = false,
+                            Nullable = true,
+                            NumericPrecision = 0,
+                            NumericScale = 0,
+                            PresentationType = null,
+                            PropertyType = typeof(string).FullName,
+                            Size = 0,
+                            RequiredInActionInput = false,
+                            UsedInActionInput = true,
+                            UsedInActionOutput = true,
+                            UsedInLookupCondition = true,
+                            UsedInQueryConstraint = true,
+                            UsedInQuerySelect = true,
+                            UsedInQuerySequence = true
+                        },
+                    }
+                    : new List<IPropertyDefinition>(0),
                 RelationshipDefinitions = new List<IRelationshipDefinition>(0)
             }
         };
