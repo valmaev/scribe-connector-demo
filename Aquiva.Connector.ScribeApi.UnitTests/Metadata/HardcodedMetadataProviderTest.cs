@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Scribe.Core.ConnectorApi.Metadata;
@@ -173,6 +174,41 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                 .SelectMany(x => x.PropertyDefinitions);
 
             Assert.Equal(shouldGetProperties, actual.Any());
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void HardcodedMetadataProvider_RetrieveMethodDefinitions_WhileReplicationServicesAreNotSupported_ShouldThrow(
+            bool shouldGetParameters)
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = Assert.Throws<InvalidOperationException>(
+                () => sut.RetrieveMethodDefinitions(shouldGetParameters));
+
+            Assert.Contains(
+                "Replication Services are not supported",
+                actual.Message,
+                StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void HardcodedMetadataProvider_RetrieveMethodDefinition_WhileReplicationServicesAreNotSupported_ShouldThrow(
+            bool shouldGetParameters)
+        {
+            var sut = CreateSystemUnderTest();
+            var objectName = Guid.NewGuid().ToString();
+
+            var actual = Assert.Throws<InvalidOperationException>(
+                () => sut.RetrieveMethodDefinition(objectName, shouldGetParameters));
+
+            Assert.Contains(
+                "Replication Services are not supported",
+                actual.Message,
+                StringComparison.InvariantCultureIgnoreCase);
         }
 
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 

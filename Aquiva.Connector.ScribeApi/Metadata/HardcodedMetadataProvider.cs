@@ -159,11 +159,13 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             bool shouldGetRelations = false) => null;
 
         public IEnumerable<IMethodDefinition> RetrieveMethodDefinitions(
-            bool shouldGetParameters = false) => throw new InvalidOperationException();
+            bool shouldGetParameters = false) =>
+                throw new InvalidOperationException("Replication Services are not supported");
 
         public IMethodDefinition RetrieveMethodDefinition(
             string objectName,
-            bool shouldGetParameters = false) => throw new InvalidOperationException();
+            bool shouldGetParameters = false) =>
+                throw new InvalidOperationException("Replication Services are not supported");
 
         public void ResetMetadata() { }
         public void Dispose() { }
