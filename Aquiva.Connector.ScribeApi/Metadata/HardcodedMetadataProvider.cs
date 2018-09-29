@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Metadata;
 
@@ -156,7 +157,9 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         public IObjectDefinition RetrieveObjectDefinition(
             string objectName,
             bool shouldGetProperties = false,
-            bool shouldGetRelations = false) => null;
+            bool shouldGetRelations = false) =>
+                RetrieveObjectDefinitions(shouldGetProperties, shouldGetRelations)
+                    .Single(x => x.FullName == objectName);
 
         public IEnumerable<IMethodDefinition> RetrieveMethodDefinitions(
             bool shouldGetParameters = false) =>

@@ -177,6 +177,32 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         }
 
         [Theory]
+        [InlineData("Organization")]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinition_WithKnownObjectName_ShouldReturnObjectByName(
+            string objectName)
+        {
+            var sut = CreateSystemUnderTest();
+            var actual = sut.RetrieveObjectDefinition(objectName);
+            Assert.Equal(objectName, actual.FullName);
+        }
+
+        [Theory]
+        [InlineData("Organization", false)]
+        [InlineData("Organization", true)]
+        public void HardcodedMetadataProvider_RetrieveObjectDefinition_Always_ShouldReturnPropertiesAccordingToFlag(
+            string objectName,
+            bool shouldGetProperties)
+        {
+            var sut = CreateSystemUnderTest();
+
+            var actual = sut
+                .RetrieveObjectDefinition(objectName, shouldGetProperties)
+                .PropertyDefinitions;
+
+            Assert.Equal(shouldGetProperties, actual.Any());
+        }
+
+        [Theory]
         [InlineData(false)]
         [InlineData(true)]
         public void HardcodedMetadataProvider_RetrieveMethodDefinitions_WhileReplicationServicesAreNotSupported_ShouldThrow(
