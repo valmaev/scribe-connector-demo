@@ -237,6 +237,14 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                 StringComparison.InvariantCultureIgnoreCase);
         }
 
+        [Fact]
+        public void HardcodedMetadataProvider_ResetMetadata_Always_ShouldNotThrow()
+        {
+            var sut = CreateSystemUnderTest();
+            var actual = Record.Exception(() => sut.ResetMetadata());
+            Assert.Null(actual);
+        }
+
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 
             new HardcodedMetadataProvider();
     }
