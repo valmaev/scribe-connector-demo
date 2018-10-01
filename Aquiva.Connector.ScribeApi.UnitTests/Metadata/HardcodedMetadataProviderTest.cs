@@ -245,6 +245,14 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             Assert.Null(actual);
         }
 
+        [Fact]
+        public void HardcodedMetadataProvider_Dispose_Always_ShouldNotThrow()
+        {
+            var sut = CreateSystemUnderTest();
+            var actual = Record.Exception(() => sut.Dispose());
+            Assert.Null(actual);
+        }
+
         private static HardcodedMetadataProvider CreateSystemUnderTest() => 
             new HardcodedMetadataProvider();
     }
