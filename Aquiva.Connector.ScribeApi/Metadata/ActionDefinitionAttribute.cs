@@ -8,9 +8,9 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         validOn: AttributeTargets.Class | AttributeTargets.Struct | AttributeTargets.Interface,
         AllowMultiple = true,
         Inherited = false)]
-    public class SupportedActionAttribute : Attribute, IActionDefinition
+    public class ActionDefinitionAttribute : Attribute, IActionDefinition
     {
-        public SupportedActionAttribute(KnownActions knownActionType)
+        public ActionDefinitionAttribute(KnownActions knownActionType)
         {
             if (!Enum.IsDefined(typeof(KnownActions), knownActionType))
             {

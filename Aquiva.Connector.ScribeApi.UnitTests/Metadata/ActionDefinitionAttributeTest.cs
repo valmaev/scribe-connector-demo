@@ -5,16 +5,16 @@ using Xunit;
 
 namespace Aquiva.Connector.ScribeApi.Metadata
 {
-    public class SupportedActionAttributeTest
+    public class ActionDefinitionAttributeTest
     {
         [Fact]
-        public void SupportedActionAttribute_Constructor_WithNonDefinedKnownActionType_ShouldThrow()
+        public void ActionDefinitionAttribute_Constructor_WithNonDefinedKnownActionType_ShouldThrow()
         {
             var nonDefinedKnownAction = int.MaxValue;
             Assert.False(Enum.IsDefined(typeof(KnownActions), nonDefinedKnownAction));
 
             var actual = Assert.Throws<InvalidEnumArgumentException>(
-                () => new SupportedActionAttribute((KnownActions) nonDefinedKnownAction));
+                () => new ActionDefinitionAttribute((KnownActions) nonDefinedKnownAction));
             Assert.Contains(nonDefinedKnownAction.ToString(), actual.Message);
             Assert.Contains(typeof(KnownActions).Name, actual.Message);
         }
@@ -30,10 +30,10 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         [InlineData(KnownActions.Update)]
         [InlineData(KnownActions.UpdateInsert)]
         [InlineData(KnownActions.UpdateWith)]
-        public void SupportedActionAttribute_Constructor_WithValidKnownActionType_ShouldInitProperties(
+        public void ActionDefinitionAttribute_Constructor_WithValidKnownActionType_ShouldInitProperties(
             KnownActions expected)
         {
-            var sut = new SupportedActionAttribute(expected);
+            var sut = new ActionDefinitionAttribute(expected);
             Assert.Equal(expected, sut.KnownActionType);
             Assert.Equal(expected.ToString(), sut.Name);
             Assert.Equal(expected.ToString(), sut.FullName);

@@ -47,7 +47,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
 
         [Theory]
         [InlineData(typeof(SupportedActions.ClassWithPropertyDefinitions))]
-        public void AttributeBasedMetadataProvider_RetrieveActionDefinitions_Always_ShouldReturnAllUniqueSupportedActionAttributeUsagesAttachedToNonHiddenObjectDefinitions(
+        public void AttributeBasedMetadataProvider_RetrieveActionDefinitions_Always_ShouldReturnAllUniqueActionDefinitionAttributeUsagesAttachedToNonHiddenObjectDefinitions(
             Type seedType)
         {
             // Arrange
@@ -61,7 +61,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                 .Where(t => sut.TypeFilter(t) 
                     && t.GetCustomAttributes<ObjectDefinitionAttribute>()
                         .Any(o => !o.Hidden))
-                .SelectMany(t => t.GetCustomAttributes<SupportedActionAttribute>())
+                .SelectMany(t => t.GetCustomAttributes<ActionDefinitionAttribute>())
                 .Distinct()
                 .ToList();
 
@@ -557,7 +557,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                     && t.GetCustomAttributes<ObjectDefinitionAttribute>().Any())
                 .ToDictionary(
                     keySelector: t => t.Name,
-                    elementSelector: t => t.GetCustomAttributes<SupportedActionAttribute>()
+                    elementSelector: t => t.GetCustomAttributes<ActionDefinitionAttribute>()
                         .Select(a => a.FullName)
                         .ToList());
 
@@ -969,34 +969,34 @@ namespace Aquiva.Connector.ScribeApi.Metadata
     namespace SupportedActionFullNames
     {
         [ObjectDefinition]
-        [SupportedAction(KnownActions.Create)]
-        [SupportedAction(KnownActions.Delete)]
+        [ActionDefinition(KnownActions.Create)]
+        [ActionDefinition(KnownActions.Delete)]
         public class ClassWithTwoSupportedActions
         {
         }
 
         [ObjectDefinition]
-        [SupportedAction(KnownActions.Create)]
-        [SupportedAction(KnownActions.InsertUpdate)]
-        [SupportedAction(KnownActions.Update)]
+        [ActionDefinition(KnownActions.Create)]
+        [ActionDefinition(KnownActions.InsertUpdate)]
+        [ActionDefinition(KnownActions.Update)]
         public struct StructWithThreeSupportedActions
         {
         }
 
         [ObjectDefinition]
-        [SupportedAction(KnownActions.Query)]
-        [SupportedAction(KnownActions.UpdateInsert)]
+        [ActionDefinition(KnownActions.Query)]
+        [ActionDefinition(KnownActions.UpdateInsert)]
         public interface IInterfaceWithTwoSupportedActions
         {
         }
 
         [ObjectDefinition]
-        public class ClassWithoutSupportedActionAttribute
+        public class ClassWithoutActionDefinitionAttribute
         {
         }
         
-        [SupportedAction(KnownActions.NativeQuery)]
-        public class ClassWithSupportedActionAttributeButWithoutObjectDefinitionAttributeShouldBeIgnored
+        [ActionDefinition(KnownActions.NativeQuery)]
+        public class ClassWithActionDefinitionAttributeButWithoutObjectDefinitionAttributeShouldBeIgnored
         {
         }
 
@@ -1008,8 +1008,8 @@ namespace Aquiva.Connector.ScribeApi.Metadata
     namespace SupportedActions
     {
         [ObjectDefinition]
-        [SupportedAction(knownActionType: KnownActions.Create)]
-        [SupportedAction(knownActionType: KnownActions.Delete)]
+        [ActionDefinition(knownActionType: KnownActions.Create)]
+        [ActionDefinition(knownActionType: KnownActions.Delete)]
         public class ClassWithDefaultObjectDefinitionFullName
         {
         }
@@ -1025,27 +1025,27 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         }
 
         [ObjectDefinition(FullName = "StructWithCustomObjectDefinitionFullName")]
-        [SupportedAction(KnownActions.Create)]
-        [SupportedAction(KnownActions.InsertUpdate)]
-        [SupportedAction(KnownActions.Update)]
+        [ActionDefinition(KnownActions.Create)]
+        [ActionDefinition(KnownActions.InsertUpdate)]
+        [ActionDefinition(KnownActions.Update)]
         public struct StructWithCustomObjectDefinitionFullName
         {
         }
 
         [ObjectDefinition(FullName = "AwesomeContact")]
-        [SupportedAction(KnownActions.Query)]
-        [SupportedAction(KnownActions.UpdateInsert)]
+        [ActionDefinition(KnownActions.Query)]
+        [ActionDefinition(KnownActions.UpdateInsert)]
         public interface IInterfaceWithCustomDefinitionFullName
         {
         }
 
         [ObjectDefinition]
-        public class ClassWithoutSupportedActionAttribute
+        public class ClassWithoutActionDefinitionAttribute
         {
         }
-        
-        [SupportedAction(KnownActions.NativeQuery)]
-        public class ClassWithSupportedActionAttributeButWithoutObjectDefinitionAttributeShouldBeIgnored
+
+        [ActionDefinition(KnownActions.NativeQuery)]
+        public class ClassWithActionDefinitionAttributeButWithoutObjectDefinitionAttributeShouldBeIgnored
         {
         }
 
@@ -1054,7 +1054,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         }
 
         [ObjectDefinition(Hidden = true)]
-        [SupportedAction(KnownActions.CreateWith)]
+        [ActionDefinition(KnownActions.CreateWith)]
         public class HiddenClassThatShouldBeIgnored
         {
         }

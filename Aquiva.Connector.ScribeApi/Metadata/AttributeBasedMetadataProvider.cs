@@ -35,7 +35,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                     t => TypeFilter(t)
                     && t.GetCustomAttributes<ObjectDefinitionAttribute>()
                         .Any(o => !o.Hidden))
-                .SelectMany(t => t.GetCustomAttributes<SupportedActionAttribute>())
+                .SelectMany(t => t.GetCustomAttributes<ActionDefinitionAttribute>())
                 .Distinct(_actionDefinitionComparer);
         }
 
@@ -57,7 +57,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
                     ? candidate.Key.Name
                     : candidate.Value.FullName.Trim();
                 candidate.Value.SupportedActionFullNames = candidate.Key
-                    .GetCustomAttributes<SupportedActionAttribute>()
+                    .GetCustomAttributes<ActionDefinitionAttribute>()
                     .Select(a => a.FullName)
                     .ToList();
                 candidate.Value.PropertyDefinitions = new List<IPropertyDefinition>();
