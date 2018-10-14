@@ -13,7 +13,7 @@ using Scribe.Core.ConnectorApi.Query;
 namespace Aquiva.Connector.ScribeApi
 {
     [ScribeConnector(
-        name: "TIBCO Scribe Platform API (Demo)",
+        name: ConnectorName,
         description: "Metaconnector which connects platform to itself.",
         connectorTypeId: ConnectorTypeIdString,
         connectorType: typeof(ScribeApiConnector),
@@ -27,6 +27,7 @@ namespace Aquiva.Connector.ScribeApi
         xapFileName: "")]
     public sealed class ScribeApiConnector : IConnector
     {
+        private const string ConnectorName = "TIBCO Scribe Platform API (Demo)";
         private const string ConnectorTypeIdString = "e0e8461e-92ae-4b5f-980b-a2dd104b7d24";
         private const string CryptoKey = "3103dcf5-6d7c-4b56-8297-f9e449b57576";
 
@@ -114,9 +115,12 @@ namespace Aquiva.Connector.ScribeApi
         }
 
         public IMetadataProvider GetMetadataProvider() =>
-            new AttributeBasedMetadataProvider(
-                Assembly.GetExecutingAssembly(),
-                t => t.Namespace == typeof(Organization).Namespace);
+            new LoggingMetadataProvider(
+                new CachingMetadataProvider(
+                    new AttributeBasedMetadataProvider(
+                        Assembly.GetExecutingAssembly(),
+                        t => t.Namespace == typeof(Organization).Namespace)),
+                ConnectorName);
 
         public IEnumerable<DataEntity> ExecuteQuery(Query query) => new DataEntity[0];
         public OperationResult ExecuteOperation(OperationInput input) => null;
