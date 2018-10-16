@@ -1,0 +1,32 @@
+@startuml
+
+hide empty description
+
+skinparam {
+     ArrowColor #FF9300
+     BackgroundColor #Black
+     DefaultBackgroundColor #Black
+    
+     DefaultFontName "Iosevka SS08"
+     DefaultFontColor #White
+    
+     Shadowing false
+}
+
+skinparam state {
+    BackgroundColor #Black
+    BorderColor #DarkOrange
+}
+
+state "OR" as OR #DarkOrange
+state "AND" as AND #DarkOrange
+state "ParentId = 1234" as ParentIdComparison
+state "Status = 'Failure'" as StatusComparison
+state "Name LIKE '%to check%'" as NameComparison
+
+OR --> AND
+OR --> NameComparison
+AND --> ParentIdComparison
+AND --> StatusComparison
+
+@enduml

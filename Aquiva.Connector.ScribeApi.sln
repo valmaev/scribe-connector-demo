@@ -16,6 +16,7 @@ ProjectSection(SolutionItems) = preProject
 	Docs\connector-lifecycle-sequence.puml = Docs\connector-lifecycle-sequence.puml
 	Docs\metadata-metaphor.puml = Docs\metadata-metaphor.puml
 	Docs\component-diagram.puml = Docs\component-diagram.puml
+	Docs\expression-tree.puml = Docs\expression-tree.puml
 EndProjectSection
 EndProject
 Global
