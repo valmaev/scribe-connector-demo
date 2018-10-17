@@ -6,7 +6,7 @@ using Scribe.Core.ConnectorApi.Metadata;
 
 namespace Aquiva.Connector.ScribeApi.Metadata
 {
-    public class CachingMetadataProvider : IMetadataProvider
+    public sealed class CachingMetadataProvider : IMetadataProvider
     {
         private IReadOnlyCollection<IActionDefinition> _actionCache;
         private IDictionary<string, IObjectDefinition> _objectCache;
