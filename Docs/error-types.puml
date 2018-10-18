@@ -1,0 +1,28 @@
+@startuml
+
+hide empty description
+
+skinparam {
+     ArrowColor #FF9300
+     BackgroundColor #Black
+     DefaultBackgroundColor #Black
+    
+     DefaultFontName "Iosevka SS08"
+     DefaultFontColor #White
+    
+     Shadowing false
+}
+
+skinparam state {
+    BackgroundColor #Black
+    BorderColor #DarkOrange
+}
+
+state "Error Types" as ErrorTypes #DarkOrange
+state "Fatal Errors" as FatalErrors
+state "Row Errors" as RowErrors
+
+ErrorTypes --> FatalErrors
+ErrorTypes --> RowErrors
+
+@enduml

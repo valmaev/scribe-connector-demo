@@ -17,6 +17,7 @@ ProjectSection(SolutionItems) = preProject
 	Docs\metadata-metaphor.puml = Docs\metadata-metaphor.puml
 	Docs\component-diagram.puml = Docs\component-diagram.puml
 	Docs\expression-tree.puml = Docs\expression-tree.puml
+	Docs\error-types.puml = Docs\error-types.puml
 EndProjectSection
 EndProject
 Global
