@@ -254,7 +254,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             Assert.NotEmpty(actual);
             foreach (var a in actual)
             {
-                Assert.Equal(false, a.IsPrimaryKey);
+                Assert.False(a.IsPrimaryKey);
                 Assert.Equal(expected, a.Nullable);
             }
         }

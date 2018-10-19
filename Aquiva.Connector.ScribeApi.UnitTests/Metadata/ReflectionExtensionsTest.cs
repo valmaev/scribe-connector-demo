@@ -210,6 +210,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             Assert.Contains(sut.FullName, actual.Message);
         }
 
+        // ReSharper disable InconsistentNaming
         [ObjectDefinition]
         private class ObjectDefinition_ShouldReturnTypeName
         {
@@ -234,5 +235,6 @@ namespace Aquiva.Connector.ScribeApi.Metadata
 
             public object ShouldThrow => "";
         }
+        // ReSharper restore InconsistentNaming
     }
 }
