@@ -75,7 +75,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         [Theory]
         [InlineData(typeof(ObjectDefinitions.BlankFullNameTestData.ShouldUseTypeName_ByDefault), false)]
         [InlineData(typeof(ObjectDefinitions.BlankFullNameTestData.ShouldUseTypeName_ByDefault), true)]
-        public void AttibuteBaseMetadataProvider_RetrieveObjectDefinitions_WithBlankFullNameInAttribute_ShouldUseTypeName(
+        public void AttributeBaseMetadataProvider_RetrieveObjectDefinitions_WithBlankFullNameInAttribute_ShouldUseTypeName(
             Type seedType,
             bool shouldGetRelations)
         {
@@ -105,7 +105,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         [Theory]
         [InlineData(typeof(ObjectDefinitions.NonBlankFullNameTestData.ShouldUseTrimmedFullName_NonBlankStringCase), false)]
         [InlineData(typeof(ObjectDefinitions.NonBlankFullNameTestData.ShouldUseTrimmedFullName_NonBlankStringCase), true)]
-        public void AttibuteBaseMetadataProvider_RetrieveObjectDefinitions_WithNonBlankFullNameInAttribute_ShouldUseTrimmedFullName(
+        public void AttributeBaseMetadataProvider_RetrieveObjectDefinitions_WithNonBlankFullNameInAttribute_ShouldUseTrimmedFullName(
             Type seedType,
             bool shouldGetRelations)
         {
@@ -656,6 +656,9 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         }
     }
 
+    // ReSharper disable InconsistentNaming
+    // ReSharper disable UnusedMember.Global
+    // ReSharper disable ClassNeverInstantiated.Global
     namespace ObjectDefinitions.BlankFullNameTestData
     {
         [ObjectDefinition]
@@ -908,7 +911,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             public string[] ArrayOfStringsField;
             
             [PropertyDefinition]
-            public int[] ArrayOfIntsField;
+            public int[] ArrayOfIntegersField;
             
             [PropertyDefinition]
             public IEnumerable<string> EnumerableOfStringField;
@@ -920,7 +923,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
             public string[] ArrayOfStringsProperty { get; set; }
             
             [PropertyDefinition]
-            public int[] ArrayOfIntsProperty { get; set; }
+            public int[] ArrayOfIntegersProperty { get; set; }
             
             [PropertyDefinition]
             public IEnumerable<string> EnumerableOfStringProperty { get; set; }
@@ -1059,4 +1062,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         {
         }
     }
+    // ReSharper restore InconsistentNaming
+    // ReSharper restore UnusedMember.Global
+    // ReSharper restore ClassNeverInstantiated.Global
 }
