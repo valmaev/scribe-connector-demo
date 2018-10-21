@@ -15,7 +15,7 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         public LoggingFixture()
         {
             var container = new UnityContainer();
-            
+
             // Put default EnterpriseLibrary registrations into container
             EnterpriseLibraryContainer.ConfigureContainer(
                 new UnityContainerConfigurator(container),
@@ -28,9 +28,9 @@ namespace Aquiva.Connector.ScribeApi.Metadata
 
             StubbedLogWriter = (StubbedLogWriter) container.Resolve<LogWriter>();
         }
-        
+
         public StubbedLogWriter StubbedLogWriter { get; }
-        
+
         public void Dispose()
         {
             StubbedLogWriter.Dispose();
@@ -53,9 +53,9 @@ namespace Aquiva.Connector.ScribeApi.Metadata
         {
             LogEntries = new List<LogEntry>();
         }
-        
+
         public IList<LogEntry> LogEntries { get; }
-        
+
         public override void Write(LogEntry log)
         {
             LogEntries.Add(log);
