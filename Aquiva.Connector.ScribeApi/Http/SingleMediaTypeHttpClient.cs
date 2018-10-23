@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Aquiva.Connector.ScribeApi.Http
 {
-    public sealed class SingleMediaTypeHttpClient
+    public sealed class SingleMediaTypeHttpClient : IDisposable
     {
         private readonly Action<HttpResponseMessage> _responseAnalyzer;
 
@@ -50,5 +50,7 @@ namespace Aquiva.Connector.ScribeApi.Http
                     new[] {Formatter},
                     token);
         }
+
+        public void Dispose() => HttpClient?.Dispose();
     }
 }

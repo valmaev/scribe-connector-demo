@@ -200,6 +200,14 @@ namespace Aquiva.Connector.ScribeApi.Http
                 new object());
         }
 
+        [Fact]
+        public void SingleMediaTypeHttpClient_Dispose_Always_ShouldNotThrow()
+        {
+            var sut = CreateSystemUnderTest();
+            var actual = Record.Exception(() => sut.Dispose());
+            Assert.Null(actual);
+        }
+
         private static SingleMediaTypeHttpClient CreateSystemUnderTest(
             HttpMessageHandler handler = null,
             MediaTypeFormatter formatter = null,
