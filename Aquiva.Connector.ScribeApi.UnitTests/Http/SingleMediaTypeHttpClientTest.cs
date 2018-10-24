@@ -14,8 +14,10 @@ using Xunit;
 
 namespace Aquiva.Connector.ScribeApi.Http
 {
-    public class SingleMediaTypeHttpClientTest
+    public class SingleMediaTypeHttpClientTest : IDisposable
     {
+        private SingleMediaTypeHttpClient _sut;
+        
         [Theory, AutoData]
         public void SingleMediaTypeHttpClient_AllPublicConstructors_Always_ShouldHaveNullGuards(
             [Frozen] Fixture fixture,
@@ -29,9 +31,9 @@ namespace Aquiva.Connector.ScribeApi.Http
         public async Task SingleMediaTypeHttpClient_SendMediaContentAsync_Always_ShouldIgnoreRequestBodyForGET()
         {
             var stubHandler = new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.OK));
-            var sut = CreateSystemUnderTest(handler: stubHandler);
+            _sut = CreateSystemUnderTest(handler: stubHandler);
 
-            await sut.SendMediaContentAsync<object, object>(
+            await _sut.SendMediaContentAsync<object, object>(
                 HttpMethod.Get,
                 new Uri("http://foobar"),
                 new object());
@@ -45,9 +47,9 @@ namespace Aquiva.Connector.ScribeApi.Http
         {
             var responseWithNullContent = new HttpResponseMessage(HttpStatusCode.OK) {Content = null};
             var stubHandler = new StubbedResponseHandler(responseWithNullContent);
-            var sut = CreateSystemUnderTest(handler: stubHandler);
+            _sut = CreateSystemUnderTest(handler: stubHandler);
 
-            await sut.SendMediaContentAsync<object, object>(
+            await _sut.SendMediaContentAsync<object, object>(
                 HttpMethod.Get,
                 new Uri("http://foobar"),
                 new object());
@@ -66,9 +68,9 @@ namespace Aquiva.Connector.ScribeApi.Http
         {
             var stubHandler = new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.OK));
             var expected = new DummyMediaTypeFormatter();
-            var sut = CreateSystemUnderTest(handler: stubHandler, formatter: expected);
+            _sut = CreateSystemUnderTest(handler: stubHandler, formatter: expected);
 
-            await sut.SendMediaContentAsync<object, object>(
+            await _sut.SendMediaContentAsync<object, object>(
                 new HttpMethod(httpMethod),
                 new Uri("http://foobar"),
                 new object());
@@ -97,10 +99,10 @@ namespace Aquiva.Connector.ScribeApi.Http
                 new[] {new MediaTypeHeaderValue("text/plain")},
                 expected);
 
-            var sut = CreateSystemUnderTest(handler: stubHandler, formatter: stubFormatter);
+            _sut = CreateSystemUnderTest(handler: stubHandler, formatter: stubFormatter);
 
             // Act
-            var actual = await sut.SendMediaContentAsync<object, object>(
+            var actual = await _sut.SendMediaContentAsync<object, object>(
                 new HttpMethod(httpMethod),
                 new Uri("http://foobar"),
                 new object());
@@ -116,10 +118,10 @@ namespace Aquiva.Connector.ScribeApi.Http
         {
             var failedResponse = new HttpResponseMessage(responseStatusCode);
             var stubHandler = new StubbedResponseHandler(failedResponse);
-            var sut = CreateSystemUnderTest(handler: stubHandler);
+            _sut = CreateSystemUnderTest(handler: stubHandler);
 
             await Assert.ThrowsAsync<HttpRequestException>(() =>
-                sut.SendMediaContentAsync<object, object>(
+                _sut.SendMediaContentAsync<object, object>(
                     HttpMethod.Get,
                     new Uri("http://foobar"),
                     new object()));
@@ -148,12 +150,12 @@ namespace Aquiva.Connector.ScribeApi.Http
             };
             var stubHandler = new StubbedResponseHandler(response);
 
-            var sut = CreateSystemUnderTest(
+            _sut = CreateSystemUnderTest(
                 handler: stubHandler,
                 formatter: new JsonMediaTypeFormatter());
 
             // Act
-            var actual = await sut.SendMediaContentAsync<object, Person>(
+            var actual = await _sut.SendMediaContentAsync<object, Person>(
                 HttpMethod.Get,
                 new Uri("http://foobar"),
                 new object());
@@ -171,10 +173,10 @@ namespace Aquiva.Connector.ScribeApi.Http
                 {Content = new StringContent("foobar")};
             var stubHandler = new StubbedResponseHandler(response);
 
-            var sut = CreateSystemUnderTest(handler: stubHandler);
+            _sut = CreateSystemUnderTest(handler: stubHandler);
 
             // Act
-            var actual = await sut.SendMediaContentAsync<object, Person>(
+            var actual = await _sut.SendMediaContentAsync<object, Person>(
                 HttpMethod.Get,
                 new Uri("http://foobar"),
                 new object());
@@ -190,11 +192,11 @@ namespace Aquiva.Connector.ScribeApi.Http
             var expected = new HttpResponseMessage(httpStatusCode);
             var stub = new StubbedResponseHandler(expected);
 
-            var sut = CreateSystemUnderTest(
+            _sut = CreateSystemUnderTest(
                 handler: stub,
                 responseAnalyzer: actual => Assert.Equal(expected, actual));
 
-            await sut.SendMediaContentAsync<object, object>(
+            await _sut.SendMediaContentAsync<object, object>(
                 HttpMethod.Get,
                 new Uri("http://foobar"),
                 new object());
@@ -225,5 +227,7 @@ namespace Aquiva.Connector.ScribeApi.Http
             public string Name { get; set; }
             public int Age { get; set; }
         }
+
+        public void Dispose() => _sut?.Dispose();
     }
 }
