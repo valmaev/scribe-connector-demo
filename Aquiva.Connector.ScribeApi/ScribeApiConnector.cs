@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using Aquiva.Connector.ScribeApi.Domain;
+using Aquiva.Connector.ScribeApi.Http;
 using Aquiva.Connector.ScribeApi.Metadata;
 using Scribe.Core.ConnectorApi;
 using Scribe.Core.ConnectorApi.Actions;
@@ -32,7 +33,7 @@ namespace Aquiva.Connector.ScribeApi
         private const string CryptoKey = "3103dcf5-6d7c-4b56-8297-f9e449b57576";
 
         private readonly HttpMessageHandler _httpMessageHandler;
-        private HttpClient _httpClient;
+        private SingleMediaTypeHttpClient _httpClient;
 
         public Guid ConnectorTypeId { get; } = Guid.Parse(ConnectorTypeIdString);
         public bool IsConnected { get; private set; }
@@ -103,7 +104,7 @@ namespace Aquiva.Connector.ScribeApi
             var password = Decryptor.Decrypt_AesManaged(properties["Password"], CryptoKey);
 
             _httpClient = ScribeApiClient.Create(baseAddress, username, password, _httpMessageHandler);
-            _httpClient.CheckConnection().GetAwaiter().GetResult();
+            _httpClient.HttpClient.CheckConnection().GetAwaiter().GetResult();
 
             IsConnected = true;
         }

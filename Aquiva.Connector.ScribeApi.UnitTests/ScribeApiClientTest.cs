@@ -37,21 +37,21 @@ namespace Aquiva.Connector.ScribeApi
 
             var expectedAuthParam = Convert.ToBase64String(
                 Encoding.UTF8.GetBytes($"{username}:{password}"));
-            Assert.Equal(baseAddress, actual.BaseAddress);
-            Assert.Equal("Basic", actual.DefaultRequestHeaders.Authorization.Scheme);
-            Assert.Equal(expectedAuthParam, actual.DefaultRequestHeaders.Authorization.Parameter);
-            Assert.Contains(actual.DefaultRequestHeaders.Accept, x => x.MediaType == "application/json");
-            Assert.Contains(actual.DefaultRequestHeaders.AcceptCharset, x => x.Value == "utf-8");
+            Assert.Equal(baseAddress, actual.HttpClient.BaseAddress);
+            Assert.Equal("Basic", actual.HttpClient.DefaultRequestHeaders.Authorization.Scheme);
+            Assert.Equal(expectedAuthParam, actual.HttpClient.DefaultRequestHeaders.Authorization.Parameter);
+            Assert.Contains(actual.HttpClient.DefaultRequestHeaders.Accept, x => x.MediaType == "application/json");
+            Assert.Contains(actual.HttpClient.DefaultRequestHeaders.AcceptCharset, x => x.Value == "utf-8");
         }
 
-        [Theory, MemberData(nameof(SuccessfulHttpStatusCodes))]
+        [Theory, MemberData(nameof(HttpStatusCodesIndicatingSuccess))]
         public async Task ScribeApiClient_CheckConnection_OnSuccessfulStatusCode_ShouldNotThrow(
             HttpStatusCode successfulStatusCode)
         {
             var handler = new StubbedResponseHandler(new HttpResponseMessage(successfulStatusCode));
             var sut = ScribeApiClient.Create(new Uri("https://foo"), "bar", "baz", handler);
 
-            var actual = await Record.ExceptionAsync(() => sut.CheckConnection());
+            var actual = await Record.ExceptionAsync(() => sut.HttpClient.CheckConnection());
 
             Assert.Null(actual);
         }
@@ -62,24 +62,26 @@ namespace Aquiva.Connector.ScribeApi
             var handler = new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.Unauthorized));
             var sut = ScribeApiClient.Create(new Uri("https://foo"), "bar", "baz", handler);
 
-            var actual = await Assert.ThrowsAsync<InvalidOperationException>(() => sut.CheckConnection());
+            var actual = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => sut.HttpClient.CheckConnection());
 
             Assert.Contains("Invalid username or password", actual.Message);
         }
 
-        [Theory, MemberData(nameof(FailureHttpStatusCodesWithoutSpecialHandling))]
+        [Theory, MemberData(nameof(HttpStatusCodesIndicatingFailureWithoutSpecialHandling))]
         public async Task ScribeApiClient_CheckConnection_OnOtherFailureStatusCodes_ShouldThrow(
             HttpStatusCode failureStatusCode)
         {
             var handler = new StubbedResponseHandler(new HttpResponseMessage(failureStatusCode));
             var sut = ScribeApiClient.Create(new Uri("https://foo"), "bar", "baz", handler);
 
-            var actual = await Assert.ThrowsAsync<InvalidOperationException>(() => sut.CheckConnection());
+            var actual = await Assert.ThrowsAsync<InvalidOperationException>(
+                () => sut.HttpClient.CheckConnection());
 
             Assert.Contains("Unknown error occured", actual.Message);
         }
 
-        public static IEnumerable<object[]> SuccessfulHttpStatusCodes()
+        public static IEnumerable<object[]> HttpStatusCodesIndicatingSuccess()
         {
             return Enum.GetValues(typeof(HttpStatusCode))
                 .Cast<int>()
@@ -88,7 +90,7 @@ namespace Aquiva.Connector.ScribeApi
                 .Select(c => new object[] {c});
         }
 
-        public static IEnumerable<object[]> FailureHttpStatusCodesWithoutSpecialHandling()
+        public static IEnumerable<object[]> HttpStatusCodesIndicatingFailureWithoutSpecialHandling()
         {
             return Enum.GetValues(typeof(HttpStatusCode))
                 .Cast<int>()

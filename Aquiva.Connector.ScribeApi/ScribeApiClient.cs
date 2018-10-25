@@ -1,15 +1,18 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Aquiva.Connector.ScribeApi.Http;
+using Newtonsoft.Json;
 
 namespace Aquiva.Connector.ScribeApi
 {
     public static class ScribeApiClient
     {
-        public static HttpClient Create(
+        public static SingleMediaTypeHttpClient Create(
             Uri baseAddress,
             string username,
             string password)
@@ -17,7 +20,7 @@ namespace Aquiva.Connector.ScribeApi
             return Create(baseAddress, username, password, new HttpClientHandler());
         }
 
-        public static HttpClient Create(
+        public static SingleMediaTypeHttpClient Create(
             Uri baseAddress,
             string username,
             string password,
@@ -42,7 +45,14 @@ namespace Aquiva.Connector.ScribeApi
                     "Basic",
                     Convert.ToBase64String(
                         Encoding.UTF8.GetBytes($"{username}:{password}")));
-            return httpClient;
+            return new SingleMediaTypeHttpClient(
+                httpClient,
+                new JsonMediaTypeFormatter
+                {
+                    SerializerSettings = new JsonSerializerSettings
+                        {NullValueHandling = NullValueHandling.Ignore}
+                },
+                r => r.EnsureSuccessStatusCode());
         }
 
         public static async Task CheckConnection(this HttpClient httpClient)
