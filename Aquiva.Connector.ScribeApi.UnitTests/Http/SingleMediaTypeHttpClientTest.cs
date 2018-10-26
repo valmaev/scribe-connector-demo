@@ -113,7 +113,7 @@ namespace Aquiva.Connector.ScribeApi.Http
 
         [Theory]
         [MemberData(nameof(NonSuccessfulStatusCodes))]
-        public async Task SingleMediaTypeHttpClient_SendMediaContentAsync_WithFailedResponse_ShouldThrow(
+        public async Task SingleMediaTypeHttpClient_SendMediaContentAsync_WithFailedResponse_ShouldThrowByDefault(
             HttpStatusCode responseStatusCode)
         {
             var failedResponse = new HttpResponseMessage(responseStatusCode);
@@ -192,9 +192,8 @@ namespace Aquiva.Connector.ScribeApi.Http
             var expected = new HttpResponseMessage(httpStatusCode);
             var stub = new StubbedResponseHandler(expected);
 
-            _sut = CreateSystemUnderTest(
-                handler: stub,
-                responseAnalyzer: actual => Assert.Equal(expected, actual));
+            _sut = CreateSystemUnderTest(handler: stub);
+            _sut.ResponseAnalyzer = actual => Assert.Equal(expected, actual);
 
             await _sut.SendMediaContentAsync<object, object>(
                 HttpMethod.Get,
@@ -212,14 +211,12 @@ namespace Aquiva.Connector.ScribeApi.Http
 
         private static SingleMediaTypeHttpClient CreateSystemUnderTest(
             HttpMessageHandler handler = null,
-            MediaTypeFormatter formatter = null,
-            Action<HttpResponseMessage> responseAnalyzer = null)
+            MediaTypeFormatter formatter = null)
         {
             return new SingleMediaTypeHttpClient(
                 new HttpClient(
                     handler ?? new StubbedResponseHandler(new HttpResponseMessage(HttpStatusCode.OK))),
-                formatter ?? new DummyMediaTypeFormatter(),
-                responseAnalyzer ?? (r => r.EnsureSuccessStatusCode()));
+                formatter ?? new DummyMediaTypeFormatter());
         }
 
         private class Person

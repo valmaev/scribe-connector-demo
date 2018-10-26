@@ -51,8 +51,7 @@ namespace Aquiva.Connector.ScribeApi
                 {
                     SerializerSettings = new JsonSerializerSettings
                         {NullValueHandling = NullValueHandling.Ignore}
-                },
-                r => r.EnsureSuccessStatusCode());
+                });
         }
 
         public static async Task CheckConnection(this HttpClient httpClient)

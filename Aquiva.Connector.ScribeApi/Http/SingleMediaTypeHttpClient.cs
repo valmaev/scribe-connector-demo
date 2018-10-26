@@ -9,27 +9,25 @@ namespace Aquiva.Connector.ScribeApi.Http
 {
     public sealed class SingleMediaTypeHttpClient : IDisposable
     {
-        private readonly Action<HttpResponseMessage> _responseAnalyzer;
+        private static readonly Action<HttpResponseMessage> DefaultResponseAnalyzer =
+            r => r.EnsureSuccessStatusCode();
 
         public SingleMediaTypeHttpClient(
             HttpClient httpClient,
-            MediaTypeFormatter formatter,
-            Action<HttpResponseMessage> responseAnalyzer)
+            MediaTypeFormatter formatter)
         {
             if (httpClient == null)
                 throw new ArgumentNullException(nameof(httpClient));
             if (formatter == null)
                 throw new ArgumentNullException(nameof(formatter));
-            if (responseAnalyzer == null)
-                throw new ArgumentNullException(nameof(responseAnalyzer));
 
             HttpClient = httpClient;
             Formatter = formatter;
-            _responseAnalyzer = responseAnalyzer;
         }
 
         public HttpClient HttpClient { get; }
         public MediaTypeFormatter Formatter { get; }
+        public Action<HttpResponseMessage> ResponseAnalyzer { get; set; } = DefaultResponseAnalyzer;
 
         public async Task<TResp> SendMediaContentAsync<TReq, TResp>(
             HttpMethod httpMethod,
@@ -43,7 +41,7 @@ namespace Aquiva.Connector.ScribeApi.Http
                 : new ObjectContent<TReq>(requestBody, Formatter);
             var request = new HttpRequestMessage(httpMethod, uri) {Content = content};
             var response = await HttpClient.SendAsync(request, completionOption, token);
-            _responseAnalyzer(response);
+            ResponseAnalyzer?.Invoke(response);
             return response.StatusCode == HttpStatusCode.NoContent || response.Content == null
                 ? default(TResp)
                 : await response.Content.ReadAsAsync<TResp>(
