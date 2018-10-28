@@ -40,6 +40,9 @@ namespace Aquiva.Connector.ScribeApi
             if (handler == null)
                 throw new ArgumentNullException(nameof(handler));
 
+            ServicePointManager.SecurityProtocol = 
+                SecurityProtocolType.Tls12 | SecurityProtocolType.Tls11;
+
             var httpClient = new HttpClient(handler) {BaseAddress = baseAddress};
             httpClient.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
