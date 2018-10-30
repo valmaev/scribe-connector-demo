@@ -39,7 +39,9 @@ namespace Aquiva.Connector.ScribeApi
         public bool IsConnected { get; private set; }
 
         public ScribeApiConnector()
-            : this(new HttpClientHandler()) { }
+            : this(
+                new DelayedHttpMessageHandler(TimeSpan.FromSeconds(1))
+                    {InnerHandler = new HttpClientHandler()}) { }
 
         public ScribeApiConnector(HttpMessageHandler httpMessageHandler)
         {
